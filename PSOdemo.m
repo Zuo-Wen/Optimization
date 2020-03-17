@@ -1,30 +1,30 @@
 clc;clear;close all;
-tic;                          %³ÌĞòÔËĞĞ¼ÆÊ±¿ªÊ¼
-E0=1.0e-20;                     %ÔÊĞíÎó²î
-MaxNum=100;                   %×î´óµü´ú´ÎÊı
-narvs=2;                      %Ä¿±êº¯ÊıµÄ×Ô±äÁ¿¸öÊı£¬½â¿Õ¼äÎ¬Êı
-particlesize=100;              %Á£×ÓÈº¹æÄ£
-c1=2;                         %¸öÌåÑ§Ï°Òò×Ó
-c2=2;                         %Éç»áÑ§Ï°Òò×Ó
-w=0.6;                        %¹ßĞÔÒò×Ó
-vmax=1;                     %Á£×ÓµÄ×î´ó·ÉÏèËÙ¶È
+tic;                          %ç¨‹åºè¿è¡Œè®¡æ—¶å¼€å§‹
+E0=1.0e-20;                     %å…è®¸è¯¯å·®
+MaxNum=100;                   %æœ€å¤§è¿­ä»£æ¬¡æ•°
+narvs=2;                      %ç›®æ ‡å‡½æ•°çš„è‡ªå˜é‡ä¸ªæ•°ï¼Œè§£ç©ºé—´ç»´æ•°
+particlesize=100;              %ç²’å­ç¾¤è§„æ¨¡
+c1=2;                         %ä¸ªä½“å­¦ä¹ å› å­
+c2=2;                         %ç¤¾ä¼šå­¦ä¹ å› å­
+w=0.6;                        %æƒ¯æ€§å› å­
+vmax=1;                     %ç²’å­çš„æœ€å¤§é£ç¿”é€Ÿåº¦
 rand('state',100);
-x=-5 + 10*rand(particlesize,narvs); %Á£×ÓÈºµÄ³õÊ¼Î»ÖÃ
-v=0.5*rand(particlesize,narvs);     %Á£×ÓÈºµÄ³õÊ¼ËÙ¶È
-%Ö¸¶¨Ä¿±êº¯Êı
+x=-5 + 10*rand(particlesize,narvs); %ç²’å­ç¾¤çš„åˆå§‹ä½ç½®
+v=0.5*rand(particlesize,narvs);     %ç²’å­ç¾¤çš„åˆå§‹é€Ÿåº¦
+%æŒ‡å®šç›®æ ‡å‡½æ•°
 fitness=inline('20+x.^2+y.^2-10*(cos(2*pi.*x)+cos(2*pi.*y))','x','y');      %
 %fitness=inline('x.^2+y.^2','x','y');      
 
 globalbest_faval_list = zeros(MaxNum,1);
-%%%»­³öÉÏÊöº¯ÊıÍ¼Ïñ
+%%%ç”»å‡ºä¸Šè¿°å‡½æ•°å›¾åƒ
 [a,b]=meshgrid([-5:0.01:5]);
 z = fitness(a,b);
 figure();mesh(a,b,z)
-xlabel('X1');ylabel('X2');title('º¯ÊıÖµ')
-saveas(gcf, 'º¯ÊıÖµ', 'png')
+xlabel('X1');ylabel('X2');title('å‡½æ•°å€¼')
+saveas(gcf, 'å‡½æ•°å€¼', 'png')
 figure(2);contour(a,b,z);hold on 
-xlabel('X1');ylabel('X2');title('µÈ¸ßÏßÍ¼')
-saveas(gcf, 'µÈ¸ßÏßÍ¼', 'png')
+xlabel('X1');ylabel('X2');title('ç­‰é«˜çº¿å›¾')
+saveas(gcf, 'ç­‰é«˜çº¿å›¾', 'png')
 pic_num = 1;
 %%%
 
@@ -37,7 +37,7 @@ personalbest_faval=f;
 globalbest_x=personalbest_x(i,:);
 k=1;
 while k<=MaxNum
-    %%%»­Á£×ÓÈºÎ»ÖÃÍ¼
+    %%%ç”»ç²’å­ç¾¤ä½ç½®å›¾
     figure(3);
     scatter(x(:,1),x(:,2)) ; 
     axis([-5,5 -5,5])
@@ -51,20 +51,20 @@ while k<=MaxNum
         imwrite(I,map,'particleLaction.gif','gif','WriteMode','append','DelayTime',0.1);
     end
     pic_num = pic_num + 1;
-    %%%¸üĞÂÎ»ÖÃºÍËÙ¶È
+    %%%æ›´æ–°ä½ç½®å’Œé€Ÿåº¦
     for i=1:particlesize
         f(i)=fitness(x(i,1),x(i,2));
-        if f(i)<personalbest_faval(i)  %ÅĞ¶Ïµ±Ç°ÖµÊÇ·ñÊÇÀúÊ·×î¼Ñ
+        if f(i)<personalbest_faval(i)  %åˆ¤æ–­å½“å‰å€¼æ˜¯å¦æ˜¯å†å²æœ€ä½³
             personalbest_faval(i)=f(i);
             personalbest_x(i,:)=x(i,:);
         end
     end
     [globalbest_faval i]=min(personalbest_faval);
     globalbest_x=personalbest_x(i,:);
-    for i=1:particlesize                    %¸üĞÂÃ¿¸ö¸öÌåµÄÎ»ÖÃ
+    for i=1:particlesize                    %æ›´æ–°æ¯ä¸ªä¸ªä½“çš„ä½ç½®
 
         v(i,:)=w*v(i,:)+c1*rand*(personalbest_x(i,:)-x(i,:))+c2*rand*(globalbest_x-x(i,:));
-        for j=1:narvs                       %ÅĞ¶ÏÊÇ·ñ³¬¹ı×î´óËÙ¶È
+        for j=1:narvs                       %åˆ¤æ–­æ˜¯å¦è¶…è¿‡æœ€å¤§é€Ÿåº¦
             if v(i,j)>vmax
                 v(i,j)=vmax;
             elseif v(i,j)<-vmax
@@ -82,8 +82,8 @@ while k<=MaxNum
 end
 globalbest_faval = num2str(globalbest_faval);
 globalbest_x     = num2str(globalbest_x);
-disp(strcat('×îĞ¡Öµµã','=',globalbest_x));
-disp(strcat('×îĞ¡Öµ','=',globalbest_faval));
+disp(strcat('æœ€å°å€¼ç‚¹','=',globalbest_x));
+disp(strcat('æœ€å°å€¼','=',globalbest_faval));
 toc;
 
 
