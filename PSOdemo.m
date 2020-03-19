@@ -1,6 +1,6 @@
 clc;clear;close all;
 tic;                          %程序运行计时开始
-E0=1.0e-20;                   %允许误差
+E0=0;                   %允许误差
 MaxNum=100;                   %最大迭代次数
 narvs=2;                      %目标函数的自变量个数，解空间维数
 particlesize=100;             %粒子群规模
@@ -76,7 +76,11 @@ while k<=MaxNum
     % globalbest_faval curve
     globalbest_faval_list(k,1) = globalbest_faval;
     
-    if abs(globalbest_faval)<E0,break,end
+     if k >1 
+        if abs(globalbest_faval_list(k,1)-globalbest_faval_list(k-1,1))<E0
+            break
+        end
+    end
     k=k+1;
 end
 globalbest_faval = num2str(globalbest_faval);
